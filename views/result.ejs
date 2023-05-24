@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <head >
+        <base href="/"> 
+        <link rel="stylesheet" href="styles/styles.css">
+        
+        <title>Speed Type</title>
+        
+        <nav >
+            <ul class="navbar">
+                <li class="logo"><a href="" onclick="reloadpage()" draggable="false" ><img src="/images/keyboard.png"  draggable="false"></a></li>
+                <li class="logo-name" ><a href="" class="logoname" draggable="false"  onclick="reloadpage()">Speed Type</a></li>
+                
+            </ul>
+            <div class="line"></div>
+        </nav>
+        
+    </head>
+
+    <body>
+       
+        <div id="result-screen" >
+            
+            <div class="wpm-container">
+            <h1 class="sub-headings" id="wpm">WPM</h1>
+            <p class="values" id="wpmvalue" style="left: 180px;"></p>
+            </div>
+           
+            <div class="acc-container">
+            <h1 class="sub-headings" id="acc">ACC</h1>
+            <p class="values" id="accvalue"></p>
+            </div>
+            <div class="chart-container">
+            <canvas id="myChart" class="chart" style="width:100%;max-width:750px ;" ></canvas>
+        </div>
+        </div>
+        <!-- <img src="/images/typing.gif"> -->
+    </div>
+
+    <div>
+     <a style="cursor: pointer;" onclick="reloadpage()"><img  id="restart" src="/images/sync.png"></a>
+</div>
+
+    </body>
+    
+    <script src="scripts/result.js"></script>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <link rel="stylesheet" href="styles/styles.css">
+    <head >
+        <title>Speed Type</title>
+        <nav >
+            <ul class="navbar">
+                <li class="logo"><a  draggable="false" ><img src="/images/keyboard.png"  draggable="false"></a></li>
+                <li class="logo-name" ><a href="" class="logoname" draggable="false" >Speed Type</a></li>
+                <li class="logout-pic"><a href="/"><img src="/images/logout.png" draggable="false"></a></li>
+                <li class="profile-pic"style="float: right;"><a style="cursor: pointer;" >
+                    <img src="data:image/<%=items.img.contentType%>;base64,<%=items.img.data.toString('base64')%>"/></li>
+                <li class="leader-board-pic" style="float: right;"><a href="" onclick="scoretablepage()"><img src="/images/leader-board.png" draggable="false"></a></li>
+                <li class="stats-pic" style="float: right;"><a href="" onclick="statspage()"><img src="/images/stats.png" draggable="false"></a></li>
+            </ul>
+            <div class="line"></div>
+        </nav>
+    </head>
+    <body ng-app="myApp" ng-controller="indexCtrl" ng-init="type('words')">
+      <p style="display:none;" id="username"><%= username %></p>
+            <div id="typing-screen">
+                <div id="options-screen" style="height: 100px;">
+                    <ul class="options" id="card">
+                        <li ><a draggable="false" id="punctuation" style="cursor: pointer;" ng-click="type('punctuations')"  onclick="choosetype('punctuation')"><span style="font-size: 16px; font-family: ;">@ </span>punctuation</a></li>
+                        <li ><a draggable="false" id="numbers" style="cursor: pointer;" ng-click="type('numbers')" onclick="choosetype('numbers')"><span style="font-size: 16px;"></span># </span>numbers</a></li>
+                        <li><a draggable="false" id="words" style="cursor: pointer;" ng-click="type('words')" onclick="choosetype('words')"><span style="font-family:'Courier New', Courier, monospace ; ">A</span> words</a></li>
+                        <li style="font-size: 20px; font-weight: bold;">|</li>
+                        <li id="time"><img draggable="false"  id="timmericon" src="/images/stopwatch.png"><span >time</span> </li>
+                        <span class="seconds">
+                        <li><a  id="sec15" onclick="choosetime('sec15')">15s</a></li>
+                        <li><a id="sec30" onclick="choosetime('sec30')">30s</a></li>
+                        <li><a  id="sec60" onclick="choosetime('sec60')">60s</a></li>
+                        </span>
+                    </ul>
+                </div>
+                <div id="countdown">
+                    <div id="countdown-number">0</div>
+                    <svg>
+                    <circle r="18" cx="20" cy="20" class="anime" id="timer-animation"></circle>
+                    </svg>
+                </div>
+                <p class="paragraph" id="text-given" readonly="true" style="user-select: none;" > </p> 
+                <textarea  class="paragraph" autofocus="autofocus" id="text-input" data-gramm="false" data-gramm_editor="false"data-enable-grammarly="false" autocapitalize="off" autocorrect="off" spellcheck="false" rows="10" cols="79" style="user-select: none;" onkeypress="logintimmer(15)"></textarea>
+           
+        </div>
+        <img src="/images/typing.gif">
+    </div>
+   
+    <div>
+     <a href="" onclick="loginreloadpage()"><img  id="restart" src="/images/sync.png"></a>
+</div>
+    </body>
+    <script src="scripts/timmer.js"></script>
+    <script src="scripts/index.js"></script>
+</html>

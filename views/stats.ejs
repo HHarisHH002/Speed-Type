@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    
+    
+    <head >
+        
+        <base href="/"> 
+        <link rel="stylesheet" href="styles/stats.css">
+        <link rel="stylesheet" href="styles/styles.css">
+        <title>Speed Type</title>
+        
+        <nav >
+            <ul class="navbar">
+                <li class="logo"><a href="" onclick="reloadpage()" draggable="false" ><img src="/images/keyboard.png"  draggable="false"></a></li>
+                <li class="logo-name" ><a href="" class="logoname" draggable="false"  onclick="reloadpage()">Speed Type</a></li>
+                <li class="profile-pic"style="float: right;"><a style="cursor: pointer;" onclick="login()"><img src="data:image/<%=statsdetails.img.contentType%>;base64,
+      <%=statsdetails.img.data.toString('base64')%>" draggable="false"></a></li>
+                <li class="leader-board-pic" style="float: right;"><a style="cursor: pointer;" onclick="loadscorespage()"><img src="/images/leader-board.png" draggable="false"></a></li>
+                <li class="stats-pic" style="float: right;"><a style="cursor: pointer;" onclick="loadstatspage()"><img src="/images/stats.png" draggable="false"></a></li>
+            </ul>
+            <div class="line"></div>
+        </nav> 
+    </head>
+    <body>
+      <p id='value' style="display: none;"><%- JSON.stringify(value) %></p>
+      <a style="cursor: pointer;" onclick="loadpage()" class="arrow-icon"><img src="images/arrow.png"></a>
+  <div class="profile-card ">
+    <div class="profile-card__img">
+      <img src="data:image/<%=statsdetails.img.contentType%>;base64,
+      <%=statsdetails.img.data.toString('base64')%>">
+    </div>
+    
+    <div class="profile-card__cnt js-profile-cnt">
+      <div class="profile-card__name" style="user-select: none;"><%= statsdetails.username %></div>
+      
+
+      <div class="profile-card-inf">
+        <div class="timer-bar">
+          <ul>
+            <li ><a id="sec15" onclick="togglesec('sec15')">Time: 15s</a></li>
+            <li ><a id="sec30" onclick="togglesec('sec30')" >Time: 30s</a></li>
+            <li ><a id="sec60" onclick="togglesec('sec60')">Time: 60s</a></li>
+          </ul>
+        </div>
+      <div id="score15sec">
+        <div class="profile-card-inf__item">
+            <div class="profile-card-inf__title"><%= statsdetails.rank15sec %></div>
+            <div class="profile-card-inf__txt">Rank</div>
+          </div>
+
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.max15score.maxwpm %></div>
+          <div class="profile-card-inf__txt">WPM</div>
+        </div>
+
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.max15score.maxaccuracy %></div>
+          <div class="profile-card-inf__txt">Accuracy</div>
+        </div>
+      </div>
+      <div id="score30sec">
+        <div class="profile-card-inf__item">
+            <div class="profile-card-inf__title"><%= statsdetails.rank30sec %></div>
+            <div class="profile-card-inf__txt">Rank</div>
+          </div>
+
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.max30score.maxwpm %></div>
+          <div class="profile-card-inf__txt">WPM</div>
+        </div>
+
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.max30score.maxaccuracy %></div>
+          <div class="profile-card-inf__txt">Accuracy</div>
+        </div>
+      </div>
+      <div id="score60sec">
+        <div class="profile-card-inf__item">
+            <div class="profile-card-inf__title"><%= statsdetails.rank60sec %></div>
+            <div class="profile-card-inf__txt">Rank</div>
+          </div>
+
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.max60score.maxwpm %></div>
+          <div class="profile-card-inf__txt">WPM</div>
+        </div>
+
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.max60score.maxaccuracy %></div>
+          <div class="profile-card-inf__txt">Accuracy</div>
+        </div>
+      </div>
+        <div class="profile-card-inf__item">
+          <div class="profile-card-inf__title"><%= statsdetails.plays %></div>
+          <div class="profile-card-inf__txt">Plays</div>
+        </div>
+
+        
+      </div>
+      <br>
+        <canvas id="myChart" class="chart" style="width:100%;max-width:580px ;" ></canvas>
+  
+
+    </div>
+
+    
+
+  </div>
+
+</div>
+
+
+    </body>
+    <script src="scripts/stats.js"></script>
+</html>

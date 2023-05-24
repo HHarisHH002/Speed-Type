@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    
+    
+    <head >
+        
+        <base href="/"> 
+        <link rel="stylesheet" href="styles/styles.css">
+        <title>Speed Type</title>
+        
+        <nav >
+            <ul class="navbar">
+                <li class="logo"><a href="" onclick="reloadpage()" draggable="false" ><img src="/images/keyboard.png"  draggable="false"></a></li>
+                <li class="logo-name" ><a href="" class="logoname" draggable="false"  onclick="reloadpage()">Speed Type</a></li>
+                <li class="profile-pic"style="float: right;"><a style="cursor: pointer;" onclick="login()"><img src="/images/user.png" draggable="false"></a></li>
+               
+               
+            </ul>
+            <div class="line"></div>
+        </nav>
+        
+    </head>
+
+    <body ng-app="myApp" ng-controller="wordsCtrl" ng-init="type('words')">
+      
+        <% if(isvalid==0 || isvalid==-1){ %>
+        <div class='login-invalid-wrapper center' id="invalid-idpopup">
+            <div class='login-invalid-content-wrapper'>
+              <span class='login-invalid-close' onclick="closepopup()"><a style="text-decoration: none;color: white;" href="/">&times;</a></span>
+              <div class='login-invalid-content'>
+                <div class='center'>
+                  <div class='image-container'>
+                    <div class='image'>
+                      <i class="fas fa-exclamation-circle"></i>
+                      <h3 style="font-weight: bold;">
+                        !
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <div class='login-invalid-text'>
+                  <h3>
+                    <%= error %>
+                  </h3>
+                  <p>
+                    <%= message %>
+                  </p>
+                </div>
+                <div class='login-invalid-button'>
+                    <% if(isvalid==0){ %>
+                  <button class='btn'  onclick="loginafter()">
+                    Login Again
+                  </button>
+                  <% } else{ %>
+                    <button class='btn'  onclick="registerafter()">
+                        Register Again
+                      </button>
+                    <% }  %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }  %>
+           
+        <div  class="overlay">
+        <div id="login-popup" class="container">
+            <div class="title" >Login</div>
+            <a class="close" style="cursor: pointer;" onclick="closed()">&times;</a>
+            
+            <form name="loginform" id="loginform" action="/login" method="POST">
+                <div class="user_details">
+                    
+                    <div class="input_pox">
+                        <span class="datails">Username</span>
+                        <input type="text" name="username" ng-model="username"  placeholder="Enter your Username" required >
+                        <!-- <span ng-show="loginform.username.$touched && loginform.username.$invalid"  style="border: 2px solid red;"></span> -->
+                  
+                    </div>
+                    
+                    <div class="input_pox">
+                        <span class="datails">Password</span>
+                        <input type="password" name="password" ng-model="password" placeholder="Enter your Password" required>
+                    </div>
+                    
+                </div>
+                <div class="button">
+                    <input type="submit" value="Login">
+                </div>
+                
+                
+            </form>
+            <div class="registertext" > Don't have an account? &nbsp;<a  style="cursor: pointer; color: #ffbf01;"  onclick="register()">Register</a></div> 
+            
+        </div>
+        
+        <div id="register-popup" class="container">
+            <div class="title">Register</div>
+            <a class="close"style="cursor: pointer;" onclick="closed()">&times;</a>
+            <form name="registerform" id="registerform" action="/register" method="POST" enctype="multipart/form-data">
+                <div class="insert-pic">
+                    <label class="-label" for="file">
+                      <span>upload</span>
+                    </label>
+                    <input id="file" type="file" name="profilepic" accept="image/*" onchange="loadFile(event)" required>
+                    <img  src="/images/account.png" id="output" width="200" />
+                  </div>
+                <div class="user_details">
+                    
+                    <div class="input_pox">
+                        <span class="datails">Username</span>
+                        <input type="text" name="username" placeholder="enter your Username" required>
+                    </div>
+                    
+                    <div class="input_pox">
+                        <span class="datails">Password</span>
+                        <input type="password" name="password" placeholder="enter your Password" required>
+                    </div>
+                    
+                </div>
+                <div class="button">
+                    <input type="submit" value="Register">
+                </div>
+            </form>
+            <div class="registertext" > Already have an account? &nbsp;<a  style="cursor: pointer; color: #ffbf01;"  onclick="login()">Login</a></div> 
+        </div>
+    
+    </div>
+        <div id="screen">
+            
+            <div id="typing-screen">
+                <div id="options-screen" style="height: 100px;">
+                    <ul class="options" id="card">
+                        <li ><a draggable="false" id="punctuation" href="#!punctuations" ng-click="type('punctuations')"  onclick="choosetype('punctuation')"><span style="font-size: 16px; font-family: ;">@ </span>punctuation</a></li>
+                        <li ><a draggable="false" id="numbers" href="#!numbers" ng-click="type('numbers')" onclick="choosetype('numbers')"><span style="font-size: 16px;"></span># </span>numbers</a></li>
+                        <li><a draggable="false" id="words" href="#!words" ng-click="type('words')" onclick="choosetype('words')"><span style="font-family:'Courier New', Courier, monospace ; ">A</span> words</a></li>
+                        <li style="font-size: 20px; font-weight: bold;">|</li>
+                        <li id="time"><img draggable="false"  id="timmericon" src="/images/stopwatch.png"><span >time</span> </li>
+                        <span class="seconds">
+                        <li><a  id="sec15" onclick="choosetime('sec15')">15s</a></li>
+                        <li><a id="sec30" onclick="choosetime('sec30')">30s</a></li>
+                        <li><a  id="sec60" onclick="choosetime('sec60')">60s</a></li>
+                        </span>
+                    </ul>
+
+                </div>
+                <div id="countdown">
+                    <div id="countdown-number">0</div>
+          
+                    <svg>
+                    <circle r="18" cx="20" cy="20" class="anime" id="timer-animation"></circle>
+                    </svg>
+                </div>
+                <p class="paragraph" id="text-given" readonly="true" style="user-select: none;" > </p> 
+                <div ng-view></div>
+                <textarea  class="paragraph" autofocus="autofocus" id="text-input" data-gramm="false" data-gramm_editor="false"data-enable-grammarly="false" autocapitalize="off" autocorrect="off" spellcheck="false" rows="10" cols="79" style="user-select: none;" onkeypress="timmer(15)"></textarea>
+           
+        </div>
+        <img src="/images/typing.gif">
+    </div>
+
+    <div>
+     <a href="" onclick="reloadpage()"><img  id="restart" src="/images/sync.png"></a>
+</div>
+
+    </body>
+    
+    <script src="scripts/timmer.js"></script>
+    
+        <script src="scripts/index.js"></script>
+        <script>
+          var loadFile = function (event) {
+  var image = document.getElementById("output");
+  image.src = URL.createObjectURL(event.target.files[0]);
+};
+        </script>
+</html>
