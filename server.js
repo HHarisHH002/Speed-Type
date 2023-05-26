@@ -55,13 +55,13 @@ app.get('/',function(req,res){
 app.get('/scoretable',function(req,res){
     var scoresec=req.query.choosensec
     if(scoresec==60){
-        var details =register.find({'rank60sec':{$gt : 0}}).sort({ 'rank60sec': 1 }).limit(10);
+        var details =register.find({'rank60sec':{$gt : 0},'max60score.maxwpm':{$gt : 0}}).sort({ 'rank60sec': 1 }).limit(10);
     }
     else if(scoresec==30){
-        var details =register.find({'rank30sec':{$gt : 0}}).sort({ 'rank30sec': 1 }).limit(10);
+        var details =register.find({'rank30sec':{$gt : 0},'max30score.maxwpm':{$gt : 0}}).sort({ 'rank30sec': 1 }).limit(10);
     }
     else{
-        var details =register.find({'rank15sec':{$gt : 0}}).sort({ 'rank15sec': 1 }).limit(10);
+        var details =register.find({'rank15sec':{$gt : 0},'max15score.maxwpm':{$gt : 0}}).sort({ 'rank15sec': 1 }).limit(10);
     }
   
 details.exec(function(err,data){
@@ -116,7 +116,7 @@ app.get('/result',async function(req,res){
     var details =register.findOne({username:req.query.username});
     if(choosentime==15){
     
-            details.exec(function(err,data){
+            details.exec(async function(err,data){
 
                 var maxwpm=data.max15score.maxwpm;
                 var maxaccuracy=data.max15score.maxaccuracy;
@@ -132,8 +132,9 @@ app.get('/result',async function(req,res){
 
                 var ranking=1;
             register.updateOne({username:req.query.username},{$push:{data:updateresults}}).exec()
-            register.updateOne({username:req.query.username},{$set:{'max15score.maxwpm':maxwpm,'max15score.maxaccuracy':maxaccuracy,'max15score.maxsec':maxsec,'max15score.maxdate':maxdate,'max15score.maxcategory':maxcategory,plays:plays}}).exec()
-        register.find({}).sort({'max15score.maxwpm':-1,'max15score.maxaccuracy':-1}).exec((err, results) => {
+            await register.updateOne({username:req.query.username},{$set:{'max15score.maxwpm':maxwpm,'max15score.maxaccuracy':maxaccuracy,'max15score.maxsec':maxsec,'max15score.maxdate':maxdate,'max15score.maxcategory':maxcategory,plays:plays}}).exec()
+            await register.find({}).sort({'max15score.maxwpm':-1,'max15score.maxaccuracy':-1}).exec((err, results) => {
+            console.log(results)
                 results.forEach((result) => {
                     register.updateOne(
                         {username : result.username},
@@ -146,7 +147,7 @@ app.get('/result',async function(req,res){
         });
     }
     else if(choosentime==30){
-        details.exec(function(err,data){
+        details.exec(async function(err,data){
 
             var maxwpm=data.max30score.maxwpm;
             var maxaccuracy=data.max30score.maxaccuracy;
@@ -161,8 +162,9 @@ app.get('/result',async function(req,res){
             var plays=data.plays+1
             var ranking=1;
         register.updateOne({username:req.query.username},{$push:{data:updateresults}}).exec()
-        register.updateOne({username:req.query.username},{$set:{'max30score.maxwpm':maxwpm,'max30score.maxaccuracy':maxaccuracy,'max30score.maxsec':maxsec,'max30score.maxdate':maxdate,'max15score.maxcategory':maxcategory,plays:plays}}).exec()
-    register.find({}).sort({'max30score.maxwpm':-1,'max30score.maxaccuracy':-1}).exec((err, results) => {
+        await register.updateOne({username:req.query.username},{$set:{'max30score.maxwpm':maxwpm,'max30score.maxaccuracy':maxaccuracy,'max30score.maxsec':maxsec,'max30score.maxdate':maxdate,'max15score.maxcategory':maxcategory,plays:plays}}).exec()
+        await register.find({}).sort({'max30score.maxwpm':-1,'max30score.maxaccuracy':-1}).exec((err, results) => {
+            console.log(results)
             results.forEach((result) => {
                 register.updateOne(
                     {username : result.username},
@@ -175,7 +177,7 @@ app.get('/result',async function(req,res){
     });
     }
     else if(choosentime==60){
-        details.exec(function(err,data){
+        details.exec(async function(err,data){
             var maxwpm=data.max60score.maxwpm;
             var maxaccuracy=data.max60score.maxaccuracy;
             if(data.max60score.maxwpm<=req.query.wpm){
@@ -189,8 +191,8 @@ app.get('/result',async function(req,res){
 
             var ranking=1;
         register.updateOne({username:req.query.username},{$push:{data:updateresults}}).exec()
-        register.updateOne({username:req.query.username},{$set:{'max60score.maxwpm':maxwpm,'max60score.maxaccuracy':maxaccuracy,'max60score.maxsec':maxsec,'max60score.maxdate':maxdate,'max60score.maxcategory':maxcategory,plays:plays}}).exec()
-    register.find({}).sort({'max60score.maxwpm':-1,'max60score.maxaccuracy':-1}).exec((err, results) => {
+        await register.updateOne({username:req.query.username},{$set:{'max60score.maxwpm':maxwpm,'max60score.maxaccuracy':maxaccuracy,'max60score.maxsec':maxsec,'max60score.maxdate':maxdate,'max60score.maxcategory':maxcategory,plays:plays}}).exec()
+    await register.find({'max60score.maxwpm':{$gt : 0}}).sort({'max60score.maxwpm':-1,'max60score.maxaccuracy':-1}).exec((err, results) => {
             results.forEach((result) => {
                 register.updateOne(
                     {username : result.username},
