@@ -136,7 +136,7 @@ app.get('/result',async function(req,res){
         register.find({}).sort({'max15score.maxwpm':-1,'max15score.maxaccuracy':-1}).exec((err, results) => {
                 results.forEach((result) => {
                     register.updateOne(
-                        {_id : result._id},
+                        {username : result.username},
                         {$set : {rank15sec : ranking}
                     }).exec()
                 ranking+=1
@@ -165,7 +165,7 @@ app.get('/result',async function(req,res){
     register.find({}).sort({'max30score.maxwpm':-1,'max30score.maxaccuracy':-1}).exec((err, results) => {
             results.forEach((result) => {
                 register.updateOne(
-                    {_id : result._id},
+                    {username : result.username},
                     {$set : {rank30sec : ranking}
                 }).exec()
             ranking+=1
@@ -193,7 +193,7 @@ app.get('/result',async function(req,res){
     register.find({}).sort({'max60score.maxwpm':-1,'max60score.maxaccuracy':-1}).exec((err, results) => {
             results.forEach((result) => {
                 register.updateOne(
-                    {_id : result._id},
+                    {username : result.username},
                     {$set : {rank60sec : ranking}
                 }).exec()
             ranking+=1
@@ -235,7 +235,7 @@ app.post('/login',function(req,res){
     });
 
 app.post('/register',upload.single('profilepic'),function(req,res){
-    
+    if(req.body.profilepic){
     var reg = new register({
         username: req.body.username,
         password: req.body.password,
@@ -243,7 +243,17 @@ app.post('/register',upload.single('profilepic'),function(req,res){
             data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
             contentType:'image/png'
         }
-    })
+    })}
+    else{
+        var reg = new register({
+            username: req.body.username,
+            password: req.body.password,
+            img: {
+                data: fs.readFileSync(path.join(__dirname + '/public/images/account.png')),
+                contentType:'image/png'
+            }
+        })
+    }
     var logindetails =register.findOne({username:req.body.username});
     logindetails.exec(function(err,data){
 
