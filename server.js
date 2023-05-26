@@ -237,7 +237,7 @@ app.post('/login',function(req,res){
     });
 
 app.post('/register',upload.single('profilepic'),function(req,res){
-    if(req.body.profilepic){
+    if(req.file){
     var reg = new register({
         username: req.body.username,
         password: req.body.password,
