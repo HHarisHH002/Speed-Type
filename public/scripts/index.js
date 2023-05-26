@@ -31,41 +31,6 @@ app.config(function($routeProvider) {
   })
 });
 
-
-
-// app.controller('wordsCtrl', function($scope,$http) {
-//   $http.get("typing.json")
-//    .then(function(response) {
-//     this.d=response.data
-//     this.d=d["words"]
-//     giventext=document.getElementById("text-given")
-//     giventext.innerHTML = d[Math.floor(Math.random() * d.length)].data;
-    
-//  });          
-// });
-// app.controller('punctuationsCtrl', function($scope,$http) {
-//   $http.get("typing.json")
-//    .then(function(response) {
-//     this.d=response.data
-//     this.d=d["punctuations"]
-//     giventext=document.getElementById("text-given")
-//     giventext.innerHTML = d[Math.floor(Math.random() * d.length)].data;
-//     console.log(giventext.innerHTML)
-//  });          
-// });
-// app.controller('numbersCtrl', function($scope,$http) {
-//   $http.get("typing.json")
-//    .then(function(response) {
-//     this.d=response.data
-//     this.d=d["numbers"]
-//     giventext=document.getElementById("text-given")
-//     giventext.innerHTML = d[Math.floor(Math.random() * d.length)].data;
-//     console.log(giventext.innerHTML)
-//  });          
-// });
-
-
-
 giventext=document.getElementById("text-given")
 inputtext=document.getElementById("text-input")
 const screen=document.getElementById("screen")
@@ -129,8 +94,10 @@ function choosetime(ids){
   
 }
 
+
 inputtext.addEventListener('input',()=>{
   text=giventext.innerText
+  total=text.length;
   giventext.innerText=''
   text.split('').forEach(character => {
       const characterspan=document.createElement('span')
@@ -144,7 +111,6 @@ inputtext.addEventListener('input',()=>{
     const arraytext=giventext.querySelectorAll('span')
     const arrayinput=inputtext.value.split('')
     totalletters=arrayinput.length;
-   
     noofcorrect=0;
     noofincorrect=0;
     arraytext.forEach((characterspan,index)=>{
@@ -153,13 +119,11 @@ inputtext.addEventListener('input',()=>{
             characterspan.classList.remove('correct')
             characterspan.classList.remove('incorrect')
             characterspan.classList.add('textopacity')
-
         }
         else if(character===characterspan.innerText){
             
             characterspan.classList.add('correct')
             characterspan.classList.remove('incorrect')
-            
             noofcorrect+=1
             noofincorrect+=1
             
@@ -170,12 +134,13 @@ inputtext.addEventListener('input',()=>{
         }
     })
     // console.log(noofcorrect)
+    
 }
 )
 
 
 var isgamestarted=0
-function timmer(){
+function logintimmer(){
   
   console.log(time)
   if(isgamestarted==0){
@@ -186,6 +151,35 @@ function timmer(){
     var sec=1;
     countdownNumberEl.textContent = countdown;
     interval=setInterval(function() {
+      if(totalletters>=total-1){
+        loginStopFunction(time-countdown,category)
+      }
+      countdown = --countdown < 0 ? loginStopFunction(time,category): countdown;
+      countdownNumberEl.textContent = countdown;
+      x_wpm.push((noofcorrect-prevcorrect)*12);
+      y_sec.push(sec);
+
+      sec+=1;
+      prevcorrect=noofcorrect;
+    }, 1000);
+    isgamestarted=1
+}
+}
+
+function timmer(){
+
+  console.log(time)
+  if(isgamestarted==0){
+    document.getElementById("timer-animation").style.animation='countdown ' + time + 's';
+    var countdownNumberEl = document.getElementById('countdown-number');
+    var countdown = time;
+
+    var sec=1;
+    countdownNumberEl.textContent = countdown;
+    interval=setInterval(function() {
+      if(totalletters>=total-1){
+        StopFunction(time-countdown)
+      }
       countdown = --countdown < 0 ? StopFunction(time): countdown;
       countdownNumberEl.textContent = countdown;
       x_wpm.push((noofcorrect-prevcorrect)*12);
@@ -199,9 +193,6 @@ function timmer(){
 }
 
 function StopFunction(time) {
-  
-  
-  console.log(x_wpm,y_sec)
   WPM=Math.floor(noofcorrect/((1/60)*5*time))
   accuracy=Math.floor((noofcorrect/totalletters)*100);
   console.log(WPM,accuracy)
@@ -209,40 +200,18 @@ function StopFunction(time) {
   window.location.href ="/resultscore?wpm="+WPM+"&accuracy="+accuracy+'&xvalues='+x_wpm+'&yvalues='+y_sec;
 
 }
-
-function logintimmer(){
-  
-  console.log(time)
-  if(isgamestarted==0){
-    document.getElementById("timer-animation").style.animation='countdown ' + time + 's';
-    var countdownNumberEl = document.getElementById('countdown-number');
-    var countdown = time;
-
-    var sec=1;
-    countdownNumberEl.textContent = countdown;
-    interval=setInterval(function() {
-      countdown = --countdown < 0 ? loginStopFunction(time,category): countdown;
-      countdownNumberEl.textContent = countdown;
-      x_wpm.push((noofcorrect-prevcorrect)*12);
-      y_sec.push(sec);
-
-      sec+=1;
-      prevcorrect=noofcorrect;
-    }, 1000);
-    isgamestarted=1
-}
-}
-
-function loginStopFunction(time) {
+function loginStopFunction(t) {
   username=document.getElementById("username").innerText
-  console.log(category)
-  console.log(x_wpm,y_sec)
-  WPM=Math.floor(noofcorrect/((1/60)*5*time))
+  WPM=Math.floor(noofcorrect/((1/60)*5*t))
   accuracy=Math.floor((noofcorrect/totalletters)*100);
   console.log(WPM,accuracy)
   clearInterval(interval);
   window.location.href ="/result?username="+username+"&wpm="+WPM+"&accuracy="+accuracy+'&sec='+time+'&category='+category+'&xvalues='+x_wpm+'&yvalues='+y_sec;
 }
+
+
+
+
 
 function reloadpage(){
   window.location.href ="/";

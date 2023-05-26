@@ -134,7 +134,7 @@ app.get('/result',async function(req,res){
             register.updateOne({username:req.query.username},{$push:{data:updateresults}}).exec()
             await register.updateOne({username:req.query.username},{$set:{'max15score.maxwpm':maxwpm,'max15score.maxaccuracy':maxaccuracy,'max15score.maxsec':maxsec,'max15score.maxdate':maxdate,'max15score.maxcategory':maxcategory,plays:plays}}).exec()
             await register.find({}).sort({'max15score.maxwpm':-1,'max15score.maxaccuracy':-1}).exec((err, results) => {
-            console.log(results)
+  
                 results.forEach((result) => {
                     register.updateOne(
                         {username : result.username},
@@ -164,7 +164,7 @@ app.get('/result',async function(req,res){
         register.updateOne({username:req.query.username},{$push:{data:updateresults}}).exec()
         await register.updateOne({username:req.query.username},{$set:{'max30score.maxwpm':maxwpm,'max30score.maxaccuracy':maxaccuracy,'max30score.maxsec':maxsec,'max30score.maxdate':maxdate,'max15score.maxcategory':maxcategory,plays:plays}}).exec()
         await register.find({}).sort({'max30score.maxwpm':-1,'max30score.maxaccuracy':-1}).exec((err, results) => {
-            console.log(results)
+           
             results.forEach((result) => {
                 register.updateOne(
                     {username : result.username},
